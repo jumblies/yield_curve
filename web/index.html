@@ -143,23 +143,32 @@
           .firstChild.textContent;
         no_of_dates = xmlDoc.getElementsByTagName("G_NEW_DATE").length;
         console.log("number of dates is " + no_of_dates);
-        last_date_label = xmlDoc.getElementsByTagName("G_NEW_DATE")[no_of_dates - 1].firstChild.textContent;
+        last_date_label = xmlDoc.getElementsByTagName("G_NEW_DATE")[
+          no_of_dates - 1
+        ].firstChild.textContent;
 
         console.log(last_date_label);
-        var last_raw = xmlDoc.getElementsByTagName("G_NEW_DATE")[no_of_dates - 1].childNodes[2].childNodes[0];
-        var first_raw = xmlDoc.getElementsByTagName("G_NEW_DATE")[0].childNodes[2].childNodes[0];
+        var last_raw = xmlDoc.getElementsByTagName("G_NEW_DATE")[
+          no_of_dates - 1
+        ].childNodes[2].childNodes[0];
+        var first_raw = xmlDoc.getElementsByTagName("G_NEW_DATE")[0]
+          .childNodes[2].childNodes[0];
         //Get the yields for the day
         for (i = 0; i < last_raw.childNodes.length - 2; i++) {
           // console.log(i + " - " + last_raw.childNodes[i].nodeName + " - " + last_raw.childNodes[i].textContent);
           last_xy_data.push(parseFloat(last_raw.childNodes[i].textContent));
         }
-        console.log("last avail data is " + last_date_label + " - " +last_xy_data);
+        console.log(
+          "last avail data is " + last_date_label + " - " + last_xy_data
+        );
 
         for (i = 0; i < first_raw.childNodes.length - 2; i++) {
           // console.log(i + " - " + first_raw.childNodes[i].nodeName + " - " + first_raw.childNodes[i].textContent);
           first_xy_data.push(parseFloat(first_raw.childNodes[i].textContent));
         }
-        console.log("first avail data is " + first_date_label + " - " + first_xy_data);
+        console.log(
+          "first avail data is " + first_date_label + " - " + first_xy_data
+        );
 
         draw_chart(
           last_xy_data,
@@ -186,13 +195,11 @@
         first_date_label
       ) {
         var ctx = document.getElementById("myChart").getContext("2d");
-        // console.log(last_xy_data);
-        // console.log(last_date_label);
         console.log(first_xy_data);
         console.log(first_date_label);
         var x_list = [1, 2, 3, 6, 12, 24, 36, 60, 84, 120, 240, 360];
 
-// moved mapping into draw function to keep data parsing short
+        // moved mapping into draw function to keep data parsing short
 
         first_xy_data = x_list.map((x, i) => {
           return {
@@ -207,7 +214,7 @@
             y: last_xy_data[i],
           };
         });
-        console.log(last_xy_data);
+        // console.log(last_xy_data);
         var chart = new Chart(ctx, {
           // The type of chart we want to create
           type: "scatter",
