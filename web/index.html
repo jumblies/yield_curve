@@ -1,374 +1,423 @@
-
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
   <head>
-	 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
-    <meta charset="UTF-8">
-		<title>
-			Yield Curve Chart
-		</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <meta charset="UTF-8" />
+    <meta name="generator" content="DokuWiki" />
+    <meta name="theme-color" content="#008800" />
+    <meta name="robots" content="noindex,nofollow" />
+
+    <link rel="stylesheet" type="text/css" href="main.css" />
+    <title>Federal Reserve Yield Curve Chart</title>
+
+    <style>
+      /* Center the loader */
+      #loader {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        z-index: 1;
+        width: 150px;
+        height: 150px;
+        margin: -75px 0 0 -75px;
+        border: 16px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 16px solid #3498db;
+        width: 120px;
+        height: 120px;
+        -webkit-animation: spin 2s linear infinite;
+        animation: spin 2s linear infinite;
+      }
+
+      @-webkit-keyframes spin {
+        0% {
+          -webkit-transform: rotate(0deg);
+        }
+
+        100% {
+          -webkit-transform: rotate(360deg);
+        }
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Add animation to "page content" */
+      .animate-bottom {
+        position: relative;
+        -webkit-animation-name: animatebottom;
+        -webkit-animation-duration: 1s;
+        animation-name: animatebottom;
+        animation-duration: 1s;
+      }
+
+      @-webkit-keyframes animatebottom {
+        from {
+          bottom: -100px;
+          opacity: 0;
+        }
+
+        to {
+          bottom: 0px;
+          opacity: 1;
+        }
+      }
+
+      @keyframes animatebottom {
+        from {
+          bottom: -100px;
+          opacity: 0;
+        }
+
+        to {
+          bottom: 0;
+          opacity: 1;
+        }
+      }
+
+      #myDiv {
+        display: none;
+        text-align: center;
+      }
+    </style>
   </head>
+
   <body>
-	  <div style="text-align:center;">
-	  <h1>US Treasury Yield Curve</h1>
-	  <h2>Fresh Data</h2>
-	  <h3><div id="loading" style="color:red;">Please Wait While Data is Fetched</div></h3>
-	  <h3>A very ugly javascript implementation of current US Treasury Yield Curve XML data<br>
-	  <br>Created mainly because I got sick of looking at popups on every site like GuruFocus. Arghh.<br>
-	  I should have done this with python...</h3>
-	  </div>
-<!--
+    <div style="text-align: center">
+      <h1>US Treasury Yield Curve</h1>
+
+      <p id="demo"></p>
+    </div>
+    <!--
 	  <h1 style="hidden;">  REMEMBER TO START PYTHON WEBSERVER WITH <br>
 	  python3 -m http.server
 </h1>
 -->
-<div class="chart-container" style="position: relative; height:40vh; width:90vw;     margin-left: auto;
-    margin-right: auto;">
-    <canvas id="myChart"></canvas>
-    <canvas id="myChart2"></canvas>
-</div>
-<!-- <canvas id="myChart" style="position: relative; height:40vh; width:80vw"></canvas> -->
-<!-- <canvas id="myChart2" style="position: relative; height:40vh; width:80vw" ></canvas> -->
+    <div
+      class="chart-container"
+      style="
+        position: relative;
+        height: 40vh;
+        width: 90vw;
+        margin-left: auto;
+        margin-right: auto;
+      "
+    >
+      <canvas id="myChart"></canvas>
+      <canvas id="myChart2"></canvas>
+    </div>
 
-<!-- <script src="https://yieldcurve.lamkerad.com/xml_loader.js"></script> -->
+    <script>
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          myFunction(this);
+        }
+      };
+      xhttp.open("GET", "DailyTreasuryYieldCurveRateData.xml", true);
+      xhttp.send();
 
-<script>
+      //global vars
+      var yield_data = {};
+      var date_list = [];
+      var last_date;
+      var last_date_label;
+      var last_xy_data;
+      var first_date;
+      var first_date_label;
+      var first_xy_data;
 
-//Real URL
-var url = 'https://cors-anywhere.herokuapp.com/https://www.treasury.gov/resource-center/data-chart-center/interest-rates/Datasets/yield.xml';
- <!-- var url = 'https://data.treasury.gov/feed.svc/DailyTreasuryYieldCurveRateData?$filter=month%28NEW_DATE%29%20eq%205%20and%20year%28NEW_DATE%29%20eq%202013'; -->
-//~ var url = 'https://www.treasury.gov/resource-center/data-chart-center/interest-rates/Datasets/yield.xml';
-//Testing URL
-//~ var url = "http://localhost:8000/yield.xml";
-var xml_data;
-var txt;
-var date_data;
-var first_date;
+      function myFunction(xml) {
+        var xmlDoc = xml.responseXML;
+        var x, i, y;
+        var txt = "";
+        xml_len = xmlDoc.getElementsByTagName("m:properties");
 
-var tag_list_last = [];
-var rate_data_penultimate = [];
-var rate_data_first = [];
-var rate_data_last = [];
-var x_list = [1, 2, 3, 6, 12, 24, 36, 60, 84, 120, 240, 360];
+        for (z = 0; z < xml_len.length; z++) {
+          x = xmlDoc.getElementsByTagName("m:properties")[z];
 
-//~ var myheaders = new Headers({method: 'POST', mode: 'cors', 'Access-Control-Allow-Origin':'*'});
-//~ myheaders.append('Content-Type', 'text/xml');
-//~ console.log(myheaders.get('Access-Control-Allow-Origin'));
+          xlen = x.childNodes.length;
+          y = x.childNodes[0];
+          // console.log(y);
 
-fetch(url
-//~ , {headers: {mode: 'cors','Access-Control-Allow-Origin':'*'}}
-)
-	.then(response => response.text())
-	.then(str => (new DOMParser()).parseFromString(str, "text/xml"))
-	.then(data => {xml_data   = (data.getElementsByTagName("G_NEW_DATE")); 
-			//~ console.log(xml_data);
-		} )
-	
-	//Get first date in dataset (usu 2 wks)
-	.then(() => {first_date =(xml_data[0]); 
-		first_date_label = first_date.firstElementChild.innerHTML;
-		var nodelist = (first_date.childNodes[2].firstChild.childNodes);
-		//~ console.log(nodelist.length);
-			for (var i = 0; i < nodelist.length - 2; i++){
-				//fixing empty first of month rate data due to bad xml construction. 
-				// filling with null
-				console.log(nodelist[i].innerHTML);
-//~ Part of data validation
-				//~ if (rate_data_first[i] == null) break;
-				if (nodelist[i].innerHTML == 0) rate_data_first.push(NaN);
-				else rate_data_first.push(nodelist[i].innerHTML);
-			};
-			
-			//function below part of validation.
-			var arrSum = function(arr){
-			  return arr.reduce(function(a,b){
-				return a + b
-			  }, 0);
-			}
-			//If array sum is 0 meaning no data, reset array to null
-			// working on data validation.		
-			//~ if (arrSum(rate_data_first) == 0) {
-				//~ console.log("all empty data = " + arrSum(rate_data_first)); 
-				//~ }
-			//~ else {
-				//~ first_xy_data = x_list.map((x, i) => {
-				  //~ return {
-					//~ x: x,
-					//~ y: rate_data_first[i]};
-					//~ });
-					//~ console.log(first_xy_data);
-				//~ }
-				first_xy_data = x_list.map((x, i) => {
-				  return {
-					x: x,
-					y: rate_data_first[i]};
-					});
-					console.log(first_xy_data);
-		})
+          var data_date;
+          var yields = [];
+          for (i = 0; i < xlen; i++) {
+            // Process only element nodes (type 1)
+            if (
+              y.nodeType == 1 &&
+              y.nodeName != "d:Id" &&
+              y.nodeName != "d:BC_30YEARDISPLAY"
+            ) {
+              if (y.nodeName == "d:NEW_DATE") {
+                // txt += y.nodeName + " = " + y.textContent.slice(0, 10) + "<br>";
+                data_date = y.textContent.slice(0, 10);
+                yield_data[y.textContent.slice(0, 10)];
+              } else {
+                // txt += y.nodeName + " = " + y.textContent + "<br>";
+                yields.push(parseFloat(y.textContent));
+              }
+            }
+            y = y.nextSibling;
+          }
+          //  Gives a JSON object with all the yield data serialized.
+          yield_data[data_date] = yields;
+        }
+        // console.log(yield_data);
+        // console.log(Object.keys(yield_data).length);
+        for (var key in yield_data) {
+          if (yield_data.hasOwnProperty(key)) {
+            // console.log(key + " -> " + yield_data[key]);
+            // console.log(key);
+            date_list.push(key);
+            txt += key + " -> " + yield_data[key] + "<br>";
+          }
+        }
 
-	// Get Penultimate Data
-	.then(() => {penultimate_date =(xml_data[xml_data.length - 2]);
-				penultimate_date_label = penultimate_date.firstElementChild.innerHTML;
+        first_date = date_list[0];
+        first_date_label = date_list[0];
+        first_xy_data = yield_data[first_date];
+        console.log(first_xy_data);
+        last_date_label = date_list[date_list.length - 1];
+        last_date = date_list[date_list.length - 1];
+        last_xy_data = yield_data[last_date];
+        // console.log(last_xy_data);
+        // date_list.forEach(element => console.log(element));
+        draw_chart(
+          last_xy_data,
+          last_date_label,
+          first_xy_data,
+          first_date_label
+        );
+        draw_chart2(
+          last_xy_data,
+          last_date_label,
+          first_xy_data,
+          first_date_label
+        );
 
-				var nodelist = (penultimate_date.childNodes[2].firstChild.childNodes);
-				for (var i = 0; i < nodelist.length - 2; i++){
-					//~ console.log(nodelist[i].innerHTML);
-					if (nodelist[i].innerHTML == null) break;
-					rate_data_penultimate.push(nodelist[i].innerHTML);
-					};
-				penultimate_xy_data = x_list.map((x, i) => {
-							  return {
-								x: x,
-								y: rate_data_penultimate[i]};
-								});
-				console.log(penultimate_xy_data);
-	})
-	.then(() => {last_date =(xml_data[xml_data.length - 1]);
-					last_date_label = last_date.firstElementChild.innerHTML;
-					var nodelist = (last_date.childNodes[2].firstChild.childNodes);
-					for (var i = 0; i < nodelist.length - 2; i++){
-						if (nodelist[i].innerHTML == null) break;
-						tag_list_last.push(nodelist[i].tagName.slice(3,));
-						rate_data_last.push(nodelist[i].innerHTML);
-						};
-					last_xy_data = x_list.map((x, i) => {
-								  return {
-									x: x,
-									y: rate_data_last[i]};
-									});
-			console.log(last_xy_data);
-		})
-	.then(() => {
-			function draw_chart(){
-			var ctx = document.getElementById("myChart");
-			var myChart = new Chart(ctx, {
-			type: 'scatter',
-			data: {
-				//~ labels: tag_list_last,
-				//~ labels: [1, 2, 3, 6, 12, 24, 36, 60, 84, 120, 240, 360],
-				datasets: [{
-					//~ label: last_xy_data,
-					label: last_date_label,
-					fill: true,
-					borderColor: "#85bb65", // The main line color
-					//~ data: rate_data_last,
-					data: last_xy_data,
-					backgroundColor: "rgba(133, 187, 101, .5)",
-					borderColor: "rgba(133, 187, 101, 1)",
-					borderWidth: 5, 
-					showLine: true,
-				},
-				{
-					label: penultimate_date_label,
-					fill: false,
-					borderColor: "red", // The main line color
-					data: penultimate_xy_data,
-					backgroundColor: "rgba(255, 0, 0, .5)",
-					showLine: true,
-					borderWidth: 2
-				},
-				{
-					label: first_date_label,
-					fill: true,
-					borderColor: "black", // The main line color
-					data: first_xy_data,
-					backgroundColor: "rgba(0, 0, 0, .5)",
-					showLine: true,
-					borderWidth: 2
-				}
-				]
-			},
-			options: {
-				responsive: true,
-				scales: {
-					      xAxes: [{
-							type: 'linear',
-							position: 'bottom',
-							ticks: {
-								display: true, 
-								fontColor: "#85bb65",
-								fontSize: 10, 
-							    stepSize: 3,
-							    padding: 1,
-							    //~ maxRotation: 0,
-							    minRotation: 90,
-								callback: function(label, index, labels) {
-									//~ console.log(label);
-									switch (label) {
-										//~ case 0:
-											//~ return 'ZERO';
-										case 3:
-											return '3M';
-										case 6:
-											return '6M';
-										case 12:
-											return 'ONE';
-										case 24:
-											return 'TWO';
-										case 36:
-											return 'THREE';
-										case 48:
-											return 'FOUR';
-										case 60:
-											return 'FIVE';
-										case 84:
-											return 'SEVEN';
-										case 120:
-											return 'TEN';
-										case 240:
-											return 'TWENTY';
-										case 360:
-											return 'THIRTY';
-									}
-								}
-							//~ }
-							},
-						  }],
-					yAxes: [{
-						ticks: {
-								display: true, 
-								fontColor: "#85bb65",
-								fontSize: 16, 
-							beginAtZero: false
-							
-						}
-					}]
-				}
-			}
-		});
-	}
-		draw_chart();
-		})
-		.then(() => {
-			function draw_chart(){
-			var ctx = document.getElementById("myChart2");
-			var myChart = new Chart(ctx, {
-			type: 'scatter',
-			data: {
-				//~ labels: tag_list_last,
-				//~ labels: tag_list_last,
-				labels: [1, 2, 3, 6, 12, 24, 36, 60, 84, 120, 240, 360],
-				datasets: [{
-					//~ label: last_xy_data,
-					label: last_date_label,
-					fill: true,
-					borderColor: "#85bb65", // The main line color
-					//~ data: rate_data_last,
-					data: last_xy_data,
-					backgroundColor: "rgba(133, 187, 101, .5)",
-					borderColor: "rgba(133, 187, 101, 1)",
-					borderWidth: 5, 
-					showLine: true,
-				},
-				{
-					label: penultimate_date_label,
-					fill: false,
-					borderColor: "red", // The main line color
-					data: penultimate_xy_data,
-					backgroundColor: "rgba(255, 0, 0, .5)",
-					showLine: true,
-					borderWidth: 2
-				},
-				{
-					label: first_date_label,
-					fill: true,
-					borderColor: "black", // The main line color
-					data: first_xy_data,
-					backgroundColor: "rgba(0, 0, 0, .5)",
-					showLine: true,
-					borderWidth: 2
-				}
-				]
-			},
-			options: {
-				responsive: true,
-				scales: {
-					      xAxes: [{
-							type: 'category',
-							position: 'bottom',
-							ticks: {
-								display: true, 
-								fontColor: "#85bb65",
-								fontSize: 10, 
-							    stepSize: 3,
-								minRotation: 90,
-								callback: function(label, index, labels) {
-									//~ console.log(label);
-									switch (label) {
-										case 0:
-											return 'ZERO';
-										case 1:
-											return '1M';
-										case 2:
-											return '2M';
-										case 3:
-											return '3M';
-										case 6:
-											return '6M';
-										case 12:
-											return 'ONE';
-										case 24:
-											return 'TWO';
-										case 36:
-											return 'THREE';
-										case 48:
-											return 'FOUR';
-										case 60:
-											return 'FIVE';
-										case 84:
-											return 'SEVEN';
-										case 120:
-											return 'TEN';
-										case 240:
-											return 'TWENTY';
-										case 360:
-											return 'THIRTY';
-									}
-								}
-							},
-						  }],
-					yAxes: [{
-						ticks: {
-								display: true, 
-								fontColor: "#85bb65",
-								fontSize: 16, 
-							beginAtZero: false
-							
-						}
-					}]
-				}
-			}
-		});
-	}
-		draw_chart();
-		})
-	.then(data => {document.getElementById("loading").style.display = 'none';})
+        // document.getElementById("demo").innerHTML = txt;
+      }
 
+      // console.log(date_list);
 
+      function draw_chart(
+        last_xy_data,
+        last_date_label,
+        first_xy_data,
+        first_date_label
+      ) {
+        var ctx = document.getElementById("myChart").getContext("2d");
+        // console.log(last_xy_data);
+        // console.log(last_date_label);
+        console.log(first_xy_data);
+        console.log(first_date_label);
+        var x_list = [1, 2, 3, 6, 12, 24, 36, 60, 84, 120, 240, 360];
+        first_xy_data = x_list.map((x, i) => {
+          return {
+            x: x,
+            y: first_xy_data[i],
+          };
+        });
+        console.log(first_xy_data);
+        last_xy_data = x_list.map((x, i) => {
+          return {
+            x: x,
+            y: last_xy_data[i],
+          };
+        });
+        console.log(last_xy_data);
+        var chart = new Chart(ctx, {
+          // The type of chart we want to create
+          type: "scatter",
 
+          // The data for our dataset
+          data: {
+            //neither label below needed because of map necessary for scatter plot spacing
+            // labels: ["1M","2M","3M","6M","1Y","2Y","3Y","5Y","7Y","10Y","20Y","30Y"],
+            // labels: [1, 2, 3, 6, 12, 24, 36, 60, 84, 120, 240, 360],
+            datasets: [
+              {
+                label: last_date_label,
+                fill: true,
+                borderColor: "#85bb65", // The main line color
+                //~ data: rate_data_last,
+                data: last_xy_data,
+                backgroundColor: "rgba(133, 187, 101, .5)",
+                borderColor: "rgba(133, 187, 101, 1)",
+                borderWidth: 5,
+                showLine: true,
+              },
+              {
+                label: first_date_label,
+                fill: true,
+                borderColor: "black", // The main line color
+                data: first_xy_data,
+                backgroundColor: "rgba(0, 0, 0, .5)",
+                showLine: true,
+                borderWidth: 2,
+              },
+            ],
+          },
 
+          // Configuration options go here
+          // options: {}
 
+          options: {
+            responsive: true,
+            scales: {
+              xAxes: [
+                {
+                  type: "linear",
+                  position: "bottom",
+                  ticks: {
+                    display: true,
+                    fontColor: "#85bb65",
+                    fontSize: 10,
+                    stepSize: 3,
+                    padding: 1,
+                    minRotation: 90,
+                    callback: function (label, index, labels) {
+                      //~ console.log(label);
+                      switch (label) {
+                        case 1:
+                          return "ZERO";
+                        case 3:
+                          return "3M";
+                        case 6:
+                          return "6M";
+                        case 12:
+                          return "ONE";
+                        case 24:
+                          return "TWO";
+                        case 36:
+                          return "THREE";
+                        case 48:
+                          return "FOUR";
+                        case 60:
+                          return "FIVE";
+                        case 84:
+                          return "SEVEN";
+                        case 120:
+                          return "TEN";
+                        case 240:
+                          return "TWENTY";
+                        case 360:
+                          return "THIRTY";
+                      }
+                    },
+                  },
+                },
+              ],
+            },
+          },
+          // options stop here
+        });
+      }
 
-
-</script>	
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<!--
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-146364049-1"></script>
--->
-<!--
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-146364049-1');
-</script>
--->
-
-
-
-
-
-
-</body>
+      function draw_chart2(
+        last_xy_data,
+        last_date_label,
+        first_xy_data,
+        first_date_label
+      ) {
+        var ctx = document.getElementById("myChart2");
+        var myChart = new Chart(ctx, {
+          type: "scatter",
+          data: {
+            labels: [1, 2, 3, 6, 12, 24, 36, 60, 84, 120, 240, 360],
+            datasets: [
+              {
+                label: last_date_label,
+                fill: true,
+                borderColor: "#85bb65", // The main line color
+                data: last_xy_data,
+                backgroundColor: "rgba(133, 187, 101, .5)",
+                borderColor: "rgba(133, 187, 101, 1)",
+                borderWidth: 5,
+                showLine: true,
+              },
+              {
+                label: first_date_label,
+                fill: true,
+                borderColor: "black", // The main line color
+                data: first_xy_data,
+                backgroundColor: "rgba(0, 0, 0, .5)",
+                showLine: true,
+                borderWidth: 2,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            scales: {
+              xAxes: [
+                {
+                  type: "category",
+                  position: "bottom",
+                  ticks: {
+                    display: true,
+                    fontColor: "#85bb65",
+                    fontSize: 10,
+                    stepSize: 3,
+                    minRotation: 90,
+                    callback: function (label, index, labels) {
+                      //~ console.log(label);
+                      switch (label) {
+                        case 0:
+                          return "ZERO";
+                        case 1:
+                          return "1M";
+                        case 2:
+                          return "2M";
+                        case 3:
+                          return "3M";
+                        case 6:
+                          return "6M";
+                        case 12:
+                          return "ONE";
+                        case 24:
+                          return "TWO";
+                        case 36:
+                          return "THREE";
+                        case 48:
+                          return "FOUR";
+                        case 60:
+                          return "FIVE";
+                        case 84:
+                          return "SEVEN";
+                        case 120:
+                          return "TEN";
+                        case 240:
+                          return "TWENTY";
+                        case 360:
+                          return "THIRTY";
+                      }
+                    },
+                  },
+                },
+              ],
+              yAxes: [
+                {
+                  ticks: {
+                    display: true,
+                    fontColor: "#85bb65",
+                    fontSize: 16,
+                    beginAtZero: false,
+                  },
+                },
+              ],
+            },
+          },
+        });
+      }
+    </script>
+  </body>
 </html>

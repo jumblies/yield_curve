@@ -1,0 +1,23 @@
+version: '3'
+services:
+  yieldcurve:
+    image: nginx_log:latest
+    ports:
+      - 6666:8080
+    volumes: 
+      - /home/glamke/docker/nginx/web:/static
+    labels:
+      - "traefik.enable=true"
+      - "traefik.reg_name.frontend.rule=Host:yieldcurve.lamkerad.com"
+      - "traefik.va_name.frontend.rule=Host:yieldcurve.dokuwiki.lamkerad.com"
+      - "traefik.backend=yieldcurve"
+      - "traefik.port=8080"
+      - "traefik.docker.network=web"
+      - "traefik.frontend.entryPoints=http,https"
+      - "traefik.frontend.headers.SSLHost=lamkerad.com"
+    networks:
+      - web
+    
+networks:
+  web:
+    external: true

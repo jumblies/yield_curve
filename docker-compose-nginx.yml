@@ -8,20 +8,21 @@ services:
       - /home/glamke/docker/nginx/web:/static
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:yieldcurve.lamkerad.com"
+      # - "traefik.reg_name.frontend.rule=Host:yieldcurve.lamkerad.com"
+      - "traefik.va_name.frontend.rule=Host:yieldcurve.dokuwiki.lamkerad.com"
       - "traefik.backend=yieldcurve"
       - "traefik.port=80"
       - "traefik.docker.network=web"
       - "traefik.frontend.entryPoints=http,https"
-      - "traefik.frontend.headers.SSLRedirect=true"
-      - "traefik.frontend.headers.STSSeconds=315360000"
-      - "traefik.frontend.headers.browserXSSFilter=true"
-      - "traefik.frontend.headers.contentTypeNosniff=true"
-      - "traefik.frontend.headers.forceSTSHeader=true"
+      # - "traefik.frontend.headers.SSLRedirect=true"
+      # - "traefik.frontend.headers.STSSeconds=315360000"
+      # - "traefik.frontend.headers.browserXSSFilter=true"
+      # - "traefik.frontend.headers.contentTypeNosniff=true"
+      # - "traefik.frontend.headers.forceSTSHeader=true"
       - "traefik.frontend.headers.SSLHost=lamkerad.com"
-      - "traefik.frontend.headers.STSIncludeSubdomains=true"
-      - "traefik.frontend.headers.STSPreload=true"
-      - "traefik.frontend.headers.frameDeny=true"
+      # - "traefik.frontend.headers.STSIncludeSubdomains=true"
+      # - "traefik.frontend.headers.STSPreload=true"
+      # - "traefik.frontend.headers.frameDeny=true"
     networks:
       - web
     
