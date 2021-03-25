@@ -1,404 +1,508 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-    <meta charset="UTF-8" />
-    <meta name="generator" content="DokuWiki" />
-    <meta name="theme-color" content="#008800" />
-    <meta name="robots" content="noindex,nofollow" />
 
-    <link rel="stylesheet" type="text/css" href="main.css" />
-    <title>Federal Reserve Yield Curve Chart</title>
+<head>
+  <!-- Google Tag Manager -->
+  <script>(function (w, d, s, l, i) {
+      w[l] = w[l] || []; w[l].push({
+        'gtm.start':
+          new Date().getTime(), event: 'gtm.js'
+      }); var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-M2WXZLH');</script>
+  <!-- End Google Tag Manager -->
 
-    <style>
-      /* Center the loader */
-      #loader {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        z-index: 1;
-        width: 150px;
-        height: 150px;
-        margin: -75px 0 0 -75px;
-        border: 16px solid #f3f3f3;
-        border-radius: 50%;
-        border-top: 16px solid #3498db;
-        width: 120px;
-        height: 120px;
-        -webkit-animation: spin 2s linear infinite;
-        animation: spin 2s linear infinite;
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+  <meta charset="UTF-8" />
+  <meta name="generator" content="DokuWiki" />
+  <meta name="theme-color" content="#008800" />
+  <meta name="robots" content="noindex,nofollow" />
+
+  <!--  <link rel="stylesheet" type="text/css" href="main.css" />  -->
+  <title>Federal Reserve Yield Curve Chart</title>
+
+  <style>
+    /* Center the loader */
+    #loader {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      z-index: 1;
+      width: 150px;
+      height: 150px;
+      margin: -75px 0 0 -75px;
+      border: 16px solid #f3f3f3;
+      border-radius: 50%;
+      border-top: 16px solid #3498db;
+      width: 120px;
+      height: 120px;
+      -webkit-animation: spin 2s linear infinite;
+      animation: spin 2s linear infinite;
+    }
+
+    @-webkit-keyframes spin {
+      0% {
+        -webkit-transform: rotate(0deg);
       }
 
-      @-webkit-keyframes spin {
-        0% {
-          -webkit-transform: rotate(0deg);
-        }
+      100% {
+        -webkit-transform: rotate(360deg);
+      }
+    }
 
-        100% {
-          -webkit-transform: rotate(360deg);
-        }
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
       }
 
-      @keyframes spin {
-        0% {
-          transform: rotate(0deg);
-        }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
 
-        100% {
-          transform: rotate(360deg);
-        }
+    /* Add animation to "page content" */
+    .animate-bottom {
+      position: relative;
+      -webkit-animation-name: animatebottom;
+      -webkit-animation-duration: 1s;
+      animation-name: animatebottom;
+      animation-duration: 1s;
+    }
+
+    @-webkit-keyframes animatebottom {
+      from {
+        bottom: -100px;
+        opacity: 0;
       }
 
-      /* Add animation to "page content" */
-      .animate-bottom {
-        position: relative;
-        -webkit-animation-name: animatebottom;
-        -webkit-animation-duration: 1s;
-        animation-name: animatebottom;
-        animation-duration: 1s;
+      to {
+        bottom: 0px;
+        opacity: 1;
+      }
+    }
+
+    @keyframes animatebottom {
+      from {
+        bottom: -100px;
+        opacity: 0;
       }
 
-      @-webkit-keyframes animatebottom {
-        from {
-          bottom: -100px;
-          opacity: 0;
-        }
-
-        to {
-          bottom: 0px;
-          opacity: 1;
-        }
+      to {
+        bottom: 0;
+        opacity: 1;
       }
+    }
 
-      @keyframes animatebottom {
-        from {
-          bottom: -100px;
-          opacity: 0;
-        }
+    #myDiv {
+      display: none;
+      text-align: center;
+    }
+  </style>
+</head>
 
-        to {
-          bottom: 0;
-          opacity: 1;
-        }
-      }
+<body>
 
-      #myDiv {
-        display: none;
-        text-align: center;
-      }
-    </style>
-  </head>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M2WXZLH" height="0" width="0"
+      style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
 
-  <body>
-    <div style="text-align: center">
-      <h1>US Treasury Yield Curve</h1>
 
-      <p id="demo"></p>
-    </div>
-    <!--
+  <div style="text-align: center">
+    <h1>US Treasury Yield Curve</h1>
+
+    <p id="demo"></p>
+  </div>
+  <!--
 	  <h1 style="hidden;">  REMEMBER TO START PYTHON WEBSERVER WITH <br>
 	  python3 -m http.server
 </h1>
 -->
-    <div
-      class="chart-container"
-      style="
+  <div class="chart-container" style="
         position: relative;
         height: 40vh;
         width: 90vw;
         margin-left: auto;
         margin-right: auto;
-      "
-    >
-      <canvas id="myChart"></canvas>
-      <canvas id="myChart2"></canvas>
-    </div>
+      ">
+    <canvas id="myChart"></canvas>
+    <canvas id="myChart2"></canvas>
+  </div>
 
-    <script>
-      var xhttp = new XMLHttpRequest();
-      xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-          myFunction(this);
+  <script>
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        myFunction(this);
+      }
+    };
+    xhttp.open("GET", "DailyTreasuryYieldCurveRateData.xml", true);
+    xhttp.send();
+
+    //global vars
+    var yield_data = {};
+    var date_list = [];
+    var last_date;
+    var last_date_label;
+    var last_xy_data = [];
+    var first_date;
+    var first_date_label;
+    var first_xy_data = [];
+    var yearhigh_xy_data = [];
+    var yearlow_xy_data = []
+
+    function myFunction(xml) {
+      var xmlDoc = xml.responseXML;
+      var x, i, y;
+      var txt = "";
+
+
+      first_date_label = xmlDoc.getElementsByTagName("G_NEW_DATE")[0].firstChild.textContent;
+      no_of_dates = xmlDoc.getElementsByTagName("G_NEW_DATE").length;
+      // console.log("number of dates is " + no_of_dates);
+      last_date_label = xmlDoc.getElementsByTagName("G_NEW_DATE")[no_of_dates - 1].firstChild.textContent;
+
+      // console.log(last_date_label);
+      var last_raw = xmlDoc.getElementsByTagName("G_NEW_DATE")[no_of_dates - 1].childNodes[2].childNodes[0];
+      var first_raw = xmlDoc.getElementsByTagName("G_NEW_DATE")[0].childNodes[2].childNodes[0];
+      //Get the yields for the day
+      for (i = 0; i < last_raw.childNodes.length - 2; i++) {
+        // console.log(i + " - " + last_raw.childNodes[i].nodeName + " - " + last_raw.childNodes[i].textContent);
+        last_xy_data.push(parseFloat(last_raw.childNodes[i].textContent));
+      }
+      // console.log(
+      //   "last avail data is " + last_date_label + " - " + last_xy_data
+      // );
+
+      for (i = 0; i < first_raw.childNodes.length - 2; i++) {
+        // console.log(i + " - " + first_raw.childNodes[i].nodeName + " - " + first_raw.childNodes[i].textContent);
+        first_xy_data.push(parseFloat(first_raw.childNodes[i].textContent));
+      }
+      // console.log(
+      //   "first avail data is " + first_date_label + " - " + first_xy_data
+      // );
+
+      //extract year high
+      // console.log(xmlDoc.getElementsByTagName("CF_YEARHIGH_1MONTH_RATE"));
+
+      var yearhigh = xmlDoc.getElementsByTagName("CF_YEARHIGH_1MONTH_RATE")[0];
+      for (var i = 0; i < 24; i++) {
+        if (i % 2 == 0) {
+          // console.log(yearhigh.nodeName);
+          yearhigh_xy_data.push(parseFloat(yearhigh.textContent));
         }
-      };
-      xhttp.open("GET", "DailyTreasuryYieldCurveRateData.xml", true);
-      xhttp.send();
-
-      //global vars
-      var yield_data = {};
-      var date_list = [];
-      var last_date;
-      var last_date_label;
-      var last_xy_data = [];
-      var first_date;
-      var first_date_label;
-      var first_xy_data = [];
-
-      function myFunction(xml) {
-        var xmlDoc = xml.responseXML;
-        var x, i, y;
-        var txt = "";
-
-        first_date_label = xmlDoc.getElementsByTagName("G_NEW_DATE")[0]
-          .firstChild.textContent;
-        no_of_dates = xmlDoc.getElementsByTagName("G_NEW_DATE").length;
-        console.log("number of dates is " + no_of_dates);
-        last_date_label = xmlDoc.getElementsByTagName("G_NEW_DATE")[
-          no_of_dates - 1
-        ].firstChild.textContent;
-
-        console.log(last_date_label);
-        var last_raw = xmlDoc.getElementsByTagName("G_NEW_DATE")[
-          no_of_dates - 1
-        ].childNodes[2].childNodes[0];
-        var first_raw = xmlDoc.getElementsByTagName("G_NEW_DATE")[0]
-          .childNodes[2].childNodes[0];
-        //Get the yields for the day
-        for (i = 0; i < last_raw.childNodes.length - 2; i++) {
-          // console.log(i + " - " + last_raw.childNodes[i].nodeName + " - " + last_raw.childNodes[i].textContent);
-          last_xy_data.push(parseFloat(last_raw.childNodes[i].textContent));
+        yearhigh = yearhigh.nextSibling;
+      }
+      for (var i = 24; i < 48; i++) {
+        if (i % 2 == 0) {
+          // console.log(yearhigh.nodeName);
+          yearlow_xy_data.push(parseFloat(yearhigh.textContent));
         }
-        console.log(
-          "last avail data is " + last_date_label + " - " + last_xy_data
-        );
-
-        for (i = 0; i < first_raw.childNodes.length - 2; i++) {
-          // console.log(i + " - " + first_raw.childNodes[i].nodeName + " - " + first_raw.childNodes[i].textContent);
-          first_xy_data.push(parseFloat(first_raw.childNodes[i].textContent));
-        }
-        console.log(
-          "first avail data is " + first_date_label + " - " + first_xy_data
-        );
-
-        draw_chart(
-          last_xy_data,
-          last_date_label,
-          first_xy_data,
-          first_date_label
-        );
-        draw_chart2(
-          last_xy_data,
-          last_date_label,
-          first_xy_data,
-          first_date_label
-        );
-
-        // document.getElementById("demo").innerHTML = txt;
+        yearhigh = yearhigh.nextSibling;
       }
 
-      // console.log(date_list);
 
-      function draw_chart(
+
+      // console.log(yearhigh_xy_data);
+      // console.log(yearlow_xy_data);
+
+
+
+      draw_chart(
         last_xy_data,
         last_date_label,
         first_xy_data,
-        first_date_label
-      ) {
-        var ctx = document.getElementById("myChart").getContext("2d");
-        console.log(first_xy_data);
-        console.log(first_date_label);
-        var x_list = [1, 2, 3, 6, 12, 24, 36, 60, 84, 120, 240, 360];
-
-        // moved mapping into draw function to keep data parsing short
-
-        first_xy_data = x_list.map((x, i) => {
-          return {
-            x: x,
-            y: first_xy_data[i],
-          };
-        });
-        console.log(first_xy_data);
-        last_xy_data = x_list.map((x, i) => {
-          return {
-            x: x,
-            y: last_xy_data[i],
-          };
-        });
-        // console.log(last_xy_data);
-        var chart = new Chart(ctx, {
-          // The type of chart we want to create
-          type: "scatter",
-
-          // The data for our dataset
-          data: {
-            //neither label below needed because of map necessary for scatter plot spacing
-            // labels: ["1M","2M","3M","6M","1Y","2Y","3Y","5Y","7Y","10Y","20Y","30Y"],
-            // labels: [1, 2, 3, 6, 12, 24, 36, 60, 84, 120, 240, 360],
-            datasets: [
-              {
-                label: last_date_label,
-                fill: true,
-                borderColor: "#85bb65", // The main line color
-                //~ data: rate_data_last,
-                data: last_xy_data,
-                backgroundColor: "rgba(133, 187, 101, .5)",
-                borderColor: "rgba(133, 187, 101, 1)",
-                borderWidth: 5,
-                showLine: true,
-              },
-              {
-                label: first_date_label,
-                fill: true,
-                borderColor: "black", // The main line color
-                data: first_xy_data,
-                backgroundColor: "rgba(0, 0, 0, .5)",
-                showLine: true,
-                borderWidth: 2,
-              },
-            ],
-          },
-
-          // Configuration options go here
-          // options: {}
-
-          options: {
-            responsive: true,
-            scales: {
-              xAxes: [
-                {
-                  type: "linear",
-                  position: "bottom",
-                  ticks: {
-                    display: true,
-                    fontColor: "#85bb65",
-                    fontSize: 10,
-                    stepSize: 3,
-                    padding: 1,
-                    minRotation: 90,
-                    callback: function (label, index, labels) {
-                      //~ console.log(label);
-                      switch (label) {
-                        case 1:
-                          return "ZERO";
-                        case 3:
-                          return "3M";
-                        case 6:
-                          return "6M";
-                        case 12:
-                          return "ONE";
-                        case 24:
-                          return "TWO";
-                        case 36:
-                          return "THREE";
-                        case 48:
-                          return "FOUR";
-                        case 60:
-                          return "FIVE";
-                        case 84:
-                          return "SEVEN";
-                        case 120:
-                          return "TEN";
-                        case 240:
-                          return "TWENTY";
-                        case 360:
-                          return "THIRTY";
-                      }
-                    },
-                  },
-                },
-              ],
-            },
-          },
-          // options stop here
-        });
-      }
-
-      function draw_chart2(
+        first_date_label,
+        yearhigh_xy_data,
+        yearlow_xy_data
+      );
+      draw_chart2(
         last_xy_data,
         last_date_label,
         first_xy_data,
-        first_date_label
-      ) {
-        var ctx = document.getElementById("myChart2");
-        var myChart = new Chart(ctx, {
-          type: "scatter",
-          data: {
-            labels: [1, 2, 3, 6, 12, 24, 36, 60, 84, 120, 240, 360],
-            datasets: [
+        first_date_label,
+        yearhigh_xy_data,
+        yearlow_xy_data
+      );
+
+      // document.getElementById("demo").innerHTML = txt;
+    }
+
+    // console.log(date_list);
+
+    function draw_chart(
+      last_xy_data,
+      last_date_label,
+      first_xy_data,
+      first_date_label,
+      yearhigh_xy_data,
+      yearlow_xy_data
+    ) {
+      var ctx = document.getElementById("myChart").getContext("2d");
+      console.log(first_xy_data);
+      console.log(first_date_label);
+      var x_list = [1, 2, 3, 6, 12, 24, 36, 60, 84, 120, 240, 360];
+
+      // moved mapping into draw function to keep data parsing short
+
+      first_xy_data = x_list.map((x, i) => {
+        return {
+          x: x,
+          y: first_xy_data[i],
+        };
+      });
+      console.log(first_xy_data);
+      last_xy_data = x_list.map((x, i) => {
+        return {
+          x: x,
+          y: last_xy_data[i],
+        };
+      });
+      // console.log(last_xy_data);
+      yearhigh_xy_data = x_list.map((x, i) => {
+        return {
+          x: x,
+          y: yearhigh_xy_data[i],
+        };
+      });
+      console.log(yearhigh_xy_data);
+
+      yearlow_xy_data = x_list.map((x, i) => {
+        return {
+          x: x,
+          y: yearlow_xy_data[i],
+        };
+      });
+      console.log(yearlow_xy_data);
+
+
+      var chart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: "scatter",
+
+        // The data for our dataset
+        data: {
+          //neither label below needed because of map necessary for scatter plot spacing
+          // labels: ["1M","2M","3M","6M","1Y","2Y","3Y","5Y","7Y","10Y","20Y","30Y"],
+          // labels: [1, 2, 3, 6, 12, 24, 36, 60, 84, 120, 240, 360],
+          datasets: [
+            {
+              label: last_date_label,
+              fill: true,
+              borderColor: "#85bb65", // The main line color
+              //~ data: rate_data_last,
+              data: last_xy_data,
+              backgroundColor: "rgba(133, 187, 101, .5)",
+              borderColor: "rgba(133, 187, 101, 1)",
+              borderWidth: 5,
+              showLine: true,
+            },
+            {
+              label: first_date_label,
+              fill: true,
+              borderColor: "black", // The main line color
+              data: first_xy_data,
+              backgroundColor: "rgba(0, 0, 0, .5)",
+              showLine: true,
+              borderWidth: 2,
+            },
+            {
+              label: "Year High",
+              fill: true,
+              borderColor: "pink", // The main line color
+              data: yearhigh_xy_data,
+              backgroundColor: "rgba(255,192,203, .5)",
+              showLine: true,
+              borderWidth: 2,
+              hidden: true,
+            },
+            {
+              label: "Year Low",
+              fill: true,
+              borderColor: "blue", // The main line color
+              data: yearlow_xy_data,
+              backgroundColor: "rgba(173, 216, 230, .5)",
+              showLine: true,
+              borderWidth: 2,
+              hidden: true,
+            },
+          ],
+        },
+
+        // Configuration options go here
+        // options: {}
+
+        options: {
+          responsive: true,
+          scales: {
+            xAxes: [
               {
-                label: last_date_label,
-                fill: true,
-                borderColor: "#85bb65", // The main line color
-                data: last_xy_data,
-                backgroundColor: "rgba(133, 187, 101, .5)",
-                borderColor: "rgba(133, 187, 101, 1)",
-                borderWidth: 5,
-                showLine: true,
-              },
-              {
-                label: first_date_label,
-                fill: true,
-                borderColor: "black", // The main line color
-                data: first_xy_data,
-                backgroundColor: "rgba(0, 0, 0, .5)",
-                showLine: true,
-                borderWidth: 2,
+                type: "linear",
+                position: "bottom",
+                ticks: {
+                  display: true,
+                  fontColor: "#85bb65",
+                  fontSize: 10,
+                  stepSize: 3,
+                  padding: 1,
+                  minRotation: 90,
+                  callback: function (label, index, labels) {
+                    //~ console.log(label);
+                    switch (label) {
+                      case 1:
+                        return "ZERO";
+                      case 3:
+                        return "3M";
+                      case 6:
+                        return "6M";
+                      case 12:
+                        return "ONE";
+                      case 24:
+                        return "TWO";
+                      case 36:
+                        return "THREE";
+                      case 48:
+                        return "FOUR";
+                      case 60:
+                        return "FIVE";
+                      case 84:
+                        return "SEVEN";
+                      case 120:
+                        return "TEN";
+                      case 240:
+                        return "TWENTY";
+                      case 360:
+                        return "THIRTY";
+                    }
+                  },
+                },
               },
             ],
           },
-          options: {
-            responsive: true,
-            scales: {
-              xAxes: [
-                {
-                  type: "category",
-                  position: "bottom",
-                  ticks: {
-                    display: true,
-                    fontColor: "#85bb65",
-                    fontSize: 10,
-                    stepSize: 3,
-                    minRotation: 90,
-                    callback: function (label, index, labels) {
-                      //~ console.log(label);
-                      switch (label) {
-                        case 0:
-                          return "ZERO";
-                        case 1:
-                          return "1M";
-                        case 2:
-                          return "2M";
-                        case 3:
-                          return "3M";
-                        case 6:
-                          return "6M";
-                        case 12:
-                          return "ONE";
-                        case 24:
-                          return "TWO";
-                        case 36:
-                          return "THREE";
-                        case 48:
-                          return "FOUR";
-                        case 60:
-                          return "FIVE";
-                        case 84:
-                          return "SEVEN";
-                        case 120:
-                          return "TEN";
-                        case 240:
-                          return "TWENTY";
-                        case 360:
-                          return "THIRTY";
-                      }
-                    },
-                  },
-                },
-              ],
-              yAxes: [
-                {
-                  ticks: {
-                    display: true,
-                    fontColor: "#85bb65",
-                    fontSize: 16,
-                    beginAtZero: false,
-                  },
-                },
-              ],
+        },
+        // options stop here
+      });
+    }
+
+    function draw_chart2(
+      last_xy_data,
+      last_date_label,
+      first_xy_data,
+      first_date_label,
+      yearhigh_xy_data,
+      yearlow_xy_data
+    ) {
+      var ctx = document.getElementById("myChart2");
+      var myChart = new Chart(ctx, {
+        type: "scatter",
+        data: {
+          labels: [1, 2, 3, 6, 12, 24, 36, 60, 84, 120, 240, 360],
+          datasets: [
+            {
+              label: last_date_label,
+              fill: true,
+              borderColor: "#85bb65", // The main line color
+              data: last_xy_data,
+              backgroundColor: "rgba(133, 187, 101, .5)",
+              borderColor: "rgba(133, 187, 101, 1)",
+              borderWidth: 5,
+              showLine: true,
             },
+            {
+              label: first_date_label,
+              fill: true,
+              borderColor: "black", // The main line color
+              data: first_xy_data,
+              backgroundColor: "rgba(0, 0, 0, .5)",
+              showLine: true,
+              borderWidth: 2,
+            },            {
+              label: "Year High",
+              fill: true,
+              borderColor: "pink", // The main line color
+              data: yearhigh_xy_data,
+              backgroundColor: "rgba(255,192,203, .5)",
+              showLine: true,
+              borderWidth: 2,
+              hidden: true,
+            },
+            {
+              label: "Year Low",
+              fill: true,
+              borderColor: "blue", // The main line color
+              data: yearlow_xy_data,
+              backgroundColor: "rgba(173, 216, 230, .5)",
+              showLine: true,
+              borderWidth: 2,
+              hidden: true,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          scales: {
+            xAxes: [
+              {
+                type: "category",
+                position: "bottom",
+                ticks: {
+                  display: true,
+                  fontColor: "#85bb65",
+                  fontSize: 10,
+                  stepSize: 3,
+                  minRotation: 90,
+                  callback: function (label, index, labels) {
+                    //~ console.log(label);
+                    switch (label) {
+                      case 0:
+                        return "ZERO";
+                      case 1:
+                        return "1M";
+                      case 2:
+                        return "2M";
+                      case 3:
+                        return "3M";
+                      case 6:
+                        return "6M";
+                      case 12:
+                        return "ONE";
+                      case 24:
+                        return "TWO";
+                      case 36:
+                        return "THREE";
+                      case 48:
+                        return "FOUR";
+                      case 60:
+                        return "FIVE";
+                      case 84:
+                        return "SEVEN";
+                      case 120:
+                        return "TEN";
+                      case 240:
+                        return "TWENTY";
+                      case 360:
+                        return "THIRTY";
+                    }
+                  },
+                },
+              },
+            ],
+            yAxes: [
+              {
+                ticks: {
+                  display: true,
+                  fontColor: "#85bb65",
+                  fontSize: 16,
+                  beginAtZero: false,
+                },
+              },
+            ],
           },
-        });
-      }
-    </script>
-  </body>
+        },
+      });
+    }
+  </script>
+</body>
+
 </html>
