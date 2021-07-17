@@ -118,6 +118,15 @@
   </div>
 
   <script>
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        myFunction(this);
+      }
+    };
+    xhttp.open("GET", "DailyTreasuryYieldCurveRateData.xml", true);
+    xhttp.send();
+
     //global vars
     var yield_data = {};
     var date_list = [];
@@ -130,42 +139,13 @@
     var yearhigh_xy_data = [];
     var yearlow_xy_data = [];
     var monthDates = [];
-    let tenYearYields = [];
-    let twentyYearYields = [];
-
-
-
-    // if (window.XMLHttpRequest) {
-    //    xhttp = new XMLHttpRequest();
-    // } else {    // IE 5/6
-    //    xhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    // }
-
-    // xhttp.overrideMimeType('text/xml');
-
-    // xhttp.open("GET", "DailyTreasuryYieldCurveRateData.xml", false);
-    // xhttp.send(null);
-    // xmlDoc = xhttp.responseXML;
-    // myFunction(xmlDoc);
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-      if (this.readyState == 4 && this.status == 200) {
-        myFunction(this);
-      }
-    };
-    xhttp.overrideMimeType('text/xml');
-    xhttp.open("GET", "DailyTreasuryYieldCurveRateData.xml", true);
-    xhttp.send();
-
-
+    var tenYearYields = [];
+    var twentyYearYields = [];
 
     function myFunction(xml) {
       var xmlDoc = xml.responseXML;
-      var x, i, y, q;
+      var x, i, y;
       var txt = "";
-      console.log(xmlDoc);
-
-
 
 
       first_date_label = xmlDoc.getElementsByTagName("G_NEW_DATE")[0].firstChild.textContent;
@@ -173,8 +153,8 @@
 
       // subroutine to graph monthly historic data
       console.log("number of dates is " + no_of_dates);
-      for (q = 0; q < no_of_dates; q++) {
-        // console.log("date " + q + " is " + xmlDoc.getElementsByTagName("G_NEW_DATE")[q].firstChild);
+      for (let q = 0; q < no_of_dates; q++) {
+        console.log("date " + q + " is " + xmlDoc.getElementsByTagName("G_NEW_DATE")[q].firstChild.textContent);
         // console.log("10Y Yield is " + xmlDoc.getElementsByTagName("BC_10YEAR")[q].textContent);
         if ((parseFloat(xmlDoc.getElementsByTagName("BC_10YEAR")[q].textContent)) > 0) {
           monthDates.push((xmlDoc.getElementsByTagName("G_NEW_DATE")[q].firstChild.textContent));
@@ -183,16 +163,17 @@
           // console.log("pushed " + q)
         };
       };
-      console.log(tenYearYields);
+
+
+
 
       last_date_label = xmlDoc.getElementsByTagName("G_NEW_DATE")[no_of_dates - 1].firstChild.textContent;
-      console.log(last_date_label);
-      var last_raw = xmlDoc.getElementsByTagName("G_NEW_DATE")[no_of_dates - 1].childNodes[2].childNodes[0];
 
-      console.log(last_raw);
+      // console.log(last_date_label);
+      var last_raw = xmlDoc.getElementsByTagName("G_NEW_DATE")[no_of_dates - 1].childNodes[2].childNodes[0];
       var first_raw = xmlDoc.getElementsByTagName("G_NEW_DATE")[0].childNodes[2].childNodes[0];
       //Get the yields for the day
-      for (i = 0; i < last_raw.childNodes.length - 2; i++) {
+      for (let i = 0; i < last_raw.childNodes.length - 2; i++) {
         console.log(i + " - " + last_raw.childNodes[i].nodeName + " - " + last_raw.childNodes[i].textContent);
         last_xy_data.push(parseFloat(last_raw.childNodes[i].textContent));
       }
