@@ -1,0 +1,11 @@
+--2021-07-16 17:30:01--  https://www.treasury.gov/resource-center/data-chart-center/interest-rates/Datasets/yield.xml
+Resolving www.treasury.gov (www.treasury.gov)... 184.30.80.43, 2600:1402:3800:2a7::550, 2600:1402:3800:283::550
+Connecting to www.treasury.gov (www.treasury.gov)|184.30.80.43|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 15485 (15K) [application/xml]
+Saving to: ‘/home/glamke/docker/yieldcurve/web/DailyTreasuryYieldCurveRateData.xml’
+
+     0K .......... .....                                      100%  312M=0s
+
+2021-07-16 17:30:01 (312 MB/s) - ‘/home/glamke/docker/yieldcurve/web/DailyTreasuryYieldCurveRateData.xml’ saved [15485/15485]
+

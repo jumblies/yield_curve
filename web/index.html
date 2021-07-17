@@ -2,16 +2,7 @@
 <html>
 
 <head>
-  <!-- Google Tag Manager -->
-  <script>(function (w, d, s, l, i) {
-      w[l] = w[l] || []; w[l].push({
-        'gtm.start':
-          new Date().getTime(), event: 'gtm.js'
-      }); var f = d.getElementsByTagName(s)[0],
-        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
-          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'dataLayer', 'GTM-M2WXZLH');</script>
-  <!-- End Google Tag Manager -->
+
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
   <meta charset="UTF-8" />
@@ -103,12 +94,6 @@
 
 <body>
 
-  <!-- Google Tag Manager (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M2WXZLH" height="0" width="0"
-      style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
-
-
   <div style="text-align: center">
     <h1>US Treasury Yield Curve</h1>
 
@@ -126,8 +111,10 @@
         margin-left: auto;
         margin-right: auto;
       ">
+    <canvas id="myChart3"></canvas>
     <canvas id="myChart"></canvas>
     <canvas id="myChart2"></canvas>
+
   </div>
 
   <script>
@@ -150,7 +137,10 @@
     var first_date_label;
     var first_xy_data = [];
     var yearhigh_xy_data = [];
-    var yearlow_xy_data = []
+    var yearlow_xy_data = [];
+    var monthDates = [];
+    var tenYearYields = [];
+    var tenYearYieldsMapped = [];
 
     function myFunction(xml) {
       var xmlDoc = xml.responseXML;
@@ -160,7 +150,22 @@
 
       first_date_label = xmlDoc.getElementsByTagName("G_NEW_DATE")[0].firstChild.textContent;
       no_of_dates = xmlDoc.getElementsByTagName("G_NEW_DATE").length;
+
+      // subroutine to graph monthly historic data
       // console.log("number of dates is " + no_of_dates);
+      for (let q = 0; q < no_of_dates; q++) {
+        // console.log("date " + q + " is " + xmlDoc.getElementsByTagName("G_NEW_DATE")[q].firstChild.textContent);
+        // console.log("10Y Yield is " + xmlDoc.getElementsByTagName("BC_10YEAR")[q].textContent);
+        if ((parseFloat(xmlDoc.getElementsByTagName("BC_10YEAR")[q].textContent)) > 0) {
+          monthDates.push((xmlDoc.getElementsByTagName("G_NEW_DATE")[q].firstChild.textContent));
+          tenYearYields.push(parseFloat(xmlDoc.getElementsByTagName("BC_10YEAR")[q].textContent));
+          // console.log("pushed " + q)
+        };
+      };
+
+
+
+
       last_date_label = xmlDoc.getElementsByTagName("G_NEW_DATE")[no_of_dates - 1].firstChild.textContent;
 
       // console.log(last_date_label);
@@ -225,7 +230,10 @@
         yearhigh_xy_data,
         yearlow_xy_data
       );
-
+      draw_chart3(
+        monthDates,
+        tenYearYields
+      );
       // document.getElementById("demo").innerHTML = txt;
     }
 
@@ -417,7 +425,7 @@
               backgroundColor: "rgba(0, 0, 0, .5)",
               showLine: true,
               borderWidth: 2,
-            },            {
+            }, {
               label: "Year High",
               fill: true,
               borderColor: "pink", // The main line color
@@ -501,7 +509,63 @@
           },
         },
       });
+
     }
+
+    function draw_chart3(
+      monthDates,
+      tenYearYields
+    ) {
+      var ctx = document.getElementById("myChart3");
+      var myChart = new Chart(ctx, {
+        type: "scatter",
+        data: {
+          labels: monthDates,
+          datasets: [
+            {
+              label: "10 Year Yield",
+              fill: true,
+              borderColor: "#85bb65", // The main line color
+              data: tenYearYields,
+              backgroundColor: "rgba(133, 187, 101, .5)",
+              borderColor: "rgba(133, 187, 101, 1)",
+              borderWidth: 5,
+              showLine: true,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          scales: {
+            xAxes: [
+              {
+                type: "category",
+                position: "bottom",
+                ticks: {
+                  display: true,
+                  fontColor: "#85bb65",
+                  fontSize: 10,
+                  stepSize: 3,
+                  minRotation: 90,
+                },
+              },
+            ],
+            yAxes: [
+              {
+                ticks: {
+                  display: true,
+                  fontColor: "#85bb65",
+                  fontSize: 16,
+                  beginAtZero: false,
+                },
+              },
+            ],
+          },
+        },
+      });
+    };
+
+
   </script>
 </body>
 
