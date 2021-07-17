@@ -140,7 +140,7 @@
     var yearlow_xy_data = [];
     var monthDates = [];
     var tenYearYields = [];
-    var tenYearYieldsMapped = [];
+    var twentyYearYields = [];
 
     function myFunction(xml) {
       var xmlDoc = xml.responseXML;
@@ -159,6 +159,7 @@
         if ((parseFloat(xmlDoc.getElementsByTagName("BC_10YEAR")[q].textContent)) > 0) {
           monthDates.push((xmlDoc.getElementsByTagName("G_NEW_DATE")[q].firstChild.textContent));
           tenYearYields.push(parseFloat(xmlDoc.getElementsByTagName("BC_10YEAR")[q].textContent));
+          twentyYearYields.push(parseFloat(xmlDoc.getElementsByTagName("BC_20YEAR")[q].textContent));
           // console.log("pushed " + q)
         };
       };
@@ -232,7 +233,8 @@
       );
       draw_chart3(
         monthDates,
-        tenYearYields
+        tenYearYields,
+        twentyYearYields
       );
       // document.getElementById("demo").innerHTML = txt;
     }
@@ -514,7 +516,8 @@
 
     function draw_chart3(
       monthDates,
-      tenYearYields
+      tenYearYields,
+      twentyYearYields
     ) {
       var ctx = document.getElementById("myChart3");
       var myChart = new Chart(ctx, {
@@ -532,6 +535,16 @@
               borderWidth: 5,
               showLine: true,
             },
+            {
+              label: "20 Year Yield",
+              fill: true,
+              borderColor: "black", // The main line color
+              data: twentyYearYields,
+              backgroundColor: "rgba(0, 0, 0, .5)",
+              borderWidth: 5,
+              showLine: true,
+              hidden: true,
+            },
           ],
         },
         options: {
@@ -544,9 +557,9 @@
                 ticks: {
                   display: true,
                   fontColor: "#85bb65",
-                  fontSize: 10,
+                  fontSize: 12,
                   stepSize: 3,
-                  minRotation: 90,
+                  minRotation: 30,
                 },
               },
             ],
