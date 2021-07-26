@@ -14,76 +14,6 @@
   <title>Federal Reserve Yield Curve Chart</title>
 
   <style>
-    /* Center the loader */
-    #loader {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      z-index: 1;
-      width: 150px;
-      height: 150px;
-      margin: -75px 0 0 -75px;
-      border: 16px solid #f3f3f3;
-      border-radius: 50%;
-      border-top: 16px solid #3498db;
-      width: 120px;
-      height: 120px;
-      -webkit-animation: spin 2s linear infinite;
-      animation: spin 2s linear infinite;
-    }
-
-    @-webkit-keyframes spin {
-      0% {
-        -webkit-transform: rotate(0deg);
-      }
-
-      100% {
-        -webkit-transform: rotate(360deg);
-      }
-    }
-
-    @keyframes spin {
-      0% {
-        transform: rotate(0deg);
-      }
-
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-
-    /* Add animation to "page content" */
-    .animate-bottom {
-      position: relative;
-      -webkit-animation-name: animatebottom;
-      -webkit-animation-duration: 1s;
-      animation-name: animatebottom;
-      animation-duration: 1s;
-    }
-
-    @-webkit-keyframes animatebottom {
-      from {
-        bottom: -100px;
-        opacity: 0;
-      }
-
-      to {
-        bottom: 0px;
-        opacity: 1;
-      }
-    }
-
-    @keyframes animatebottom {
-      from {
-        bottom: -100px;
-        opacity: 0;
-      }
-
-      to {
-        bottom: 0;
-        opacity: 1;
-      }
-    }
 
     #myDiv {
       display: none;
@@ -106,8 +36,8 @@
 -->
   <div class="chart-container" style="
         position: relative;
-        height: 40vh;
-        width: 90vw;
+        height: 20vh;
+        width: 70vw;
         margin-left: auto;
         margin-right: auto;
       ">
@@ -163,10 +93,7 @@
       var xmlDoc = xml.responseXML;
       var x, i, y, q;
       var txt = "";
-      console.log(xmlDoc);
-
-
-
+      // console.log(xmlDoc);
 
       first_date_label = xmlDoc.getElementsByTagName("G_NEW_DATE")[0].firstChild.textContent;
       no_of_dates = xmlDoc.getElementsByTagName("G_NEW_DATE").length;
@@ -196,22 +123,12 @@
         console.log(i + " - " + last_raw.childNodes[i].nodeName + " - " + last_raw.childNodes[i].textContent);
         last_xy_data.push(parseFloat(last_raw.childNodes[i].textContent));
       }
-      // console.log(
-      //   "last avail data is " + last_date_label + " - " + last_xy_data
-      // );
-
+      
       for (i = 0; i < first_raw.childNodes.length - 2; i++) {
         // console.log(i + " - " + first_raw.childNodes[i].nodeName + " - " + first_raw.childNodes[i].textContent);
         first_xy_data.push(parseFloat(first_raw.childNodes[i].textContent));
       }
-      // console.log(
-      //   "first avail data is " + first_date_label + " - " + first_xy_data
-      // );
-
-      //extract year high
-      // console.log(xmlDoc.getElementsByTagName("CF_YEARHIGH_1MONTH_RATE"));
-
-      var yearhigh = xmlDoc.getElementsByTagName("CF_YEARHIGH_1MONTH_RATE")[0];
+            var yearhigh = xmlDoc.getElementsByTagName("CF_YEARHIGH_1MONTH_RATE")[0];
       for (var i = 0; i < 24; i++) {
         if (i % 2 == 0) {
           // console.log(yearhigh.nodeName);

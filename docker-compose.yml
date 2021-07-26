@@ -1,11 +1,13 @@
 version: '3'
 services:
   yieldcurve:
+    container_name: yieldcurve
     image: nginx_log:latest
+    restart: unless-stopped
     ports:
       - 6666:8080
     volumes: 
-      - /home/glamke/docker/nginx/web:/static
+      - /home/glamke/docker/yieldcurve/web:/static
     labels:
       - "traefik.enable=true"
       - "traefik.reg_name.frontend.rule=Host:yieldcurve.lamkerad.com"
