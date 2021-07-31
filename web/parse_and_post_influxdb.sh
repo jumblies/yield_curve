@@ -13,11 +13,13 @@ post_influx () {
 
 }
 
+BC_DURATION=( "BC_1MONTH" "BC_2MONTH" "BC_3MONTH" "BC_6MONTH" "BC_1YEAR" "BC_2YEAR" "BC_3YEAR" "BC_5YEAR" "BC_10YEAR" "BC_20YEAR" "BC_30YEAR" )
 
 # Set today's date for matching - use carat to uppercase the date string. 
 DATE=$(date +%d-%^b-%y)
-# echo $DATE
-# DATE FORMAT 
+
+# ******************
+# TEST DATE 
 # DATE="30-JUL-21"
 
 echo "Parsing XML For Posting"
@@ -26,55 +28,15 @@ while read_dom; do
     if [[ $CONTENT = $DATE ]]; then
         echo "$ENTITY => $CONTENT"
         while read_dom; do
-            if [[ $ENTITY = "BC_1MONTH" ]]; then
-                echo "$ENTITY => $CONTENT"
-                #Pass to influxDB posting function
-                post_influx $ENTITY $CONTENT
-            fi
-            if [[ $ENTITY = "BC_2MONTH" ]]; then
-                echo "$ENTITY => $CONTENT"
-                post_influx $ENTITY $CONTENT            
-            fi
-            if [[ $ENTITY = "BC_3MONTH" ]]; then
-                echo "$ENTITY => $CONTENT"
-                post_influx $ENTITY $CONTENT            
-            fi
-            if [[ $ENTITY = "BC_6MONTH" ]]; then
-                echo "$ENTITY => $CONTENT"
-                post_influx $ENTITY $CONTENT            
-            fi
-            if [[ $ENTITY = "BC_1YEAR" ]]; then
-                echo "$ENTITY => $CONTENT"
-                post_influx $ENTITY $CONTENT            
-            fi
-            if [[ $ENTITY = "BC_2YEAR" ]]; then
-                echo "$ENTITY => $CONTENT"
-                post_influx $ENTITY $CONTENT            
-            fi
-            if [[ $ENTITY = "BC_3YEAR" ]]; then
-                echo "$ENTITY => $CONTENT"
-                post_influx $ENTITY $CONTENT            
-            fi
-            if [[ $ENTITY = "BC_5YEAR" ]]; then
-                echo "$ENTITY => $CONTENT"
-                post_influx $ENTITY $CONTENT            
-            fi
-            if [[ $ENTITY = "BC_7YEAR" ]]; then
-                echo "$ENTITY => $CONTENT"
-                post_influx $ENTITY $CONTENT            
-            fi
-            if [[ $ENTITY = "BC_10YEAR" ]]; then
-                echo "$ENTITY => $CONTENT"
-                post_influx $ENTITY $CONTENT            
-            fi
-            if [[ $ENTITY = "BC_20YEAR" ]]; then
-                echo "$ENTITY => $CONTENT"
-                post_influx $ENTITY $CONTENT            
-            fi
-            if [[ $ENTITY = "BC_30YEAR" ]]; then
-                echo "$ENTITY => $CONTENT"
-                post_influx $ENTITY $CONTENT            
-            fi
+            for i in "${BC_DURATION[@]}"
+                do
+                    
+                    if [[ $ENTITY = $i ]]; then
+                        echo "$ENTITY => $CONTENT"
+                        #Pass to influxDB posting function
+                        post_influx $ENTITY $CONTENT
+                    fi
+                done
         done
     fi
 done < /home/glamke/docker/yieldcurve/web/DailyTreasuryYieldCurveRateData.xml 
