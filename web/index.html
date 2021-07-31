@@ -99,7 +99,7 @@
       no_of_dates = xmlDoc.getElementsByTagName("G_NEW_DATE").length;
 
       // subroutine to graph monthly historic data
-      console.log("number of dates is " + no_of_dates);
+      // console.log("number of dates is " + no_of_dates);
       for (q = 0; q < no_of_dates; q++) {
         // console.log("date " + q + " is " + xmlDoc.getElementsByTagName("G_NEW_DATE")[q].firstChild);
         // console.log("10Y Yield is " + xmlDoc.getElementsByTagName("BC_10YEAR")[q].textContent);
@@ -110,17 +110,17 @@
           // console.log("pushed " + q)
         };
       };
-      console.log(tenYearYields);
+      // console.log(tenYearYields);
 
       last_date_label = xmlDoc.getElementsByTagName("G_NEW_DATE")[no_of_dates - 1].firstChild.textContent;
-      console.log(last_date_label);
+      // console.log(last_date_label);
       var last_raw = xmlDoc.getElementsByTagName("G_NEW_DATE")[no_of_dates - 1].childNodes[2].childNodes[0];
 
-      console.log(last_raw);
+      // console.log(last_raw);
       var first_raw = xmlDoc.getElementsByTagName("G_NEW_DATE")[0].childNodes[2].childNodes[0];
       //Get the yields for the day
       for (i = 0; i < last_raw.childNodes.length - 2; i++) {
-        console.log(i + " - " + last_raw.childNodes[i].nodeName + " - " + last_raw.childNodes[i].textContent);
+        // console.log(i + " - " + last_raw.childNodes[i].nodeName + " - " + last_raw.childNodes[i].textContent);
         last_xy_data.push(parseFloat(last_raw.childNodes[i].textContent));
       }
       
@@ -186,8 +186,8 @@
       yearlow_xy_data
     ) {
       var ctx = document.getElementById("myChart").getContext("2d");
-      console.log(first_xy_data);
-      console.log(first_date_label);
+      // console.log(first_xy_data);
+      // console.log(first_date_label);
       var x_list = [1, 2, 3, 6, 12, 24, 36, 60, 84, 120, 240, 360];
 
       // moved mapping into draw function to keep data parsing short
@@ -198,7 +198,7 @@
           y: first_xy_data[i],
         };
       });
-      console.log(first_xy_data);
+      // console.log(first_xy_data);
       last_xy_data = x_list.map((x, i) => {
         return {
           x: x,
@@ -212,7 +212,7 @@
           y: yearhigh_xy_data[i],
         };
       });
-      console.log(yearhigh_xy_data);
+      // console.log(yearhigh_xy_data);
 
       yearlow_xy_data = x_list.map((x, i) => {
         return {
@@ -220,7 +220,7 @@
           y: yearlow_xy_data[i],
         };
       });
-      console.log(yearlow_xy_data);
+      // console.log(yearlow_xy_data);
 
 
       var chart = new Chart(ctx, {

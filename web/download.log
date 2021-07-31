@@ -1,11 +1,157 @@
---2021-07-23 17:30:01--  https://www.treasury.gov/resource-center/data-chart-center/interest-rates/Datasets/yield.xml
+--2021-07-30 17:30:01--  https://www.treasury.gov/resource-center/data-chart-center/interest-rates/Datasets/yield.xml
 Resolving www.treasury.gov (www.treasury.gov)... 104.95.216.27, 2600:1402:3800:283::550, 2600:1402:3800:2a7::550
 Connecting to www.treasury.gov (www.treasury.gov)|104.95.216.27|:443... connected.
 HTTP request sent, awaiting response... 200 OK
-Length: 19291 (19K) [application/xml]
+Length: 23097 (23K) [application/xml]
 Saving to: ‘/home/glamke/docker/yieldcurve/web/DailyTreasuryYieldCurveRateData.xml’
 
-     0K .......... ........                                   100% 30.2M=0.001s
+     0K .......... .......... ..                              100% 2.04M=0.01s
 
-2021-07-23 17:30:01 (30.2 MB/s) - ‘/home/glamke/docker/yieldcurve/web/DailyTreasuryYieldCurveRateData.xml’ saved [19291/19291]
+2021-07-30 17:30:01 (2.04 MB/s) - ‘/home/glamke/docker/yieldcurve/web/DailyTreasuryYieldCurveRateData.xml’ saved [23097/23097]
+
+Parsing XML For Posting
+BID_CURVE_DATE => 30-JUL-21
+BC_1MONTH => .05
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100    25    0     0  100    25      0   1562 --:--:-- --:--:-- --:--:--  1562
+HTTP/1.1 204 No Content
+Content-Type: application/json
+Request-Id: 4c48a126-f17d-11eb-8dc5-0242ac150003
+X-Influxdb-Build: OSS
+X-Influxdb-Version: 1.7.10
+X-Request-Id: 4c48a126-f17d-11eb-8dc5-0242ac150003
+Date: Fri, 30 Jul 2021 21:30:01 GMT
+
+BC_2MONTH => .05
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100    25    0     0  100    25      0   3571 --:--:-- --:--:-- --:--:--  3571
+HTTP/1.1 204 No Content
+Content-Type: application/json
+Request-Id: 4c4b86c2-f17d-11eb-8dc6-0242ac150003
+X-Influxdb-Build: OSS
+X-Influxdb-Version: 1.7.10
+X-Request-Id: 4c4b86c2-f17d-11eb-8dc6-0242ac150003
+Date: Fri, 30 Jul 2021 21:30:01 GMT
+
+BC_3MONTH => .06
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100    25    0     0  100    25      0   2777 --:--:-- --:--:-- --:--:--  2777
+HTTP/1.1 204 No Content
+Content-Type: application/json
+Request-Id: 4c4dc83b-f17d-11eb-8dc7-0242ac150003
+X-Influxdb-Build: OSS
+X-Influxdb-Version: 1.7.10
+X-Request-Id: 4c4dc83b-f17d-11eb-8dc7-0242ac150003
+Date: Fri, 30 Jul 2021 21:30:01 GMT
+
+BC_6MONTH => .05
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100    25    0     0  100    25      0   3571 --:--:-- --:--:-- --:--:--  3571
+HTTP/1.1 204 No Content
+Content-Type: application/json
+Request-Id: 4c50400b-f17d-11eb-8dc8-0242ac150003
+X-Influxdb-Build: OSS
+X-Influxdb-Version: 1.7.10
+X-Request-Id: 4c50400b-f17d-11eb-8dc8-0242ac150003
+Date: Fri, 30 Jul 2021 21:30:01 GMT
+
+BC_1YEAR => .07
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100    24    0     0  100    24      0   2666 --:--:-- --:--:-- --:--:--  2666
+HTTP/1.1 204 No Content
+Content-Type: application/json
+Request-Id: 4c5279ed-f17d-11eb-8dc9-0242ac150003
+X-Influxdb-Build: OSS
+X-Influxdb-Version: 1.7.10
+X-Request-Id: 4c5279ed-f17d-11eb-8dc9-0242ac150003
+Date: Fri, 30 Jul 2021 21:30:01 GMT
+
+BC_2YEAR => .19
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100    24    0     0  100    24      0   2666 --:--:-- --:--:-- --:--:--  2666
+HTTP/1.1 204 No Content
+Content-Type: application/json
+Request-Id: 4c54f9c3-f17d-11eb-8dca-0242ac150003
+X-Influxdb-Build: OSS
+X-Influxdb-Version: 1.7.10
+X-Request-Id: 4c54f9c3-f17d-11eb-8dca-0242ac150003
+Date: Fri, 30 Jul 2021 21:30:01 GMT
+
+BC_3YEAR => .35
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100    24    0     0  100    24      0   3000 --:--:-- --:--:-- --:--:--  3000
+HTTP/1.1 204 No Content
+Content-Type: application/json
+Request-Id: 4c57844d-f17d-11eb-8dcb-0242ac150003
+X-Influxdb-Build: OSS
+X-Influxdb-Version: 1.7.10
+X-Request-Id: 4c57844d-f17d-11eb-8dcb-0242ac150003
+Date: Fri, 30 Jul 2021 21:30:01 GMT
+
+BC_5YEAR => .69
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100    24    0     0  100    24      0   2181 --:--:-- --:--:-- --:--:--  2181
+HTTP/1.1 204 No Content
+Content-Type: application/json
+Request-Id: 4c59ead4-f17d-11eb-8dcc-0242ac150003
+X-Influxdb-Build: OSS
+X-Influxdb-Version: 1.7.10
+X-Request-Id: 4c59ead4-f17d-11eb-8dcc-0242ac150003
+Date: Fri, 30 Jul 2021 21:30:01 GMT
+
+BC_7YEAR => 1
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100    22    0     0  100    22      0   1833 --:--:-- --:--:-- --:--:--  1833
+HTTP/1.1 204 No Content
+Content-Type: application/json
+Request-Id: 4c5ca8de-f17d-11eb-8dcd-0242ac150003
+X-Influxdb-Build: OSS
+X-Influxdb-Version: 1.7.10
+X-Request-Id: 4c5ca8de-f17d-11eb-8dcd-0242ac150003
+Date: Fri, 30 Jul 2021 21:30:01 GMT
+
+BC_10YEAR => 1.24
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100    26    0     0  100    26      0   3250 --:--:-- --:--:-- --:--:--  3250
+HTTP/1.1 204 No Content
+Content-Type: application/json
+Request-Id: 4c5f997b-f17d-11eb-8dce-0242ac150003
+X-Influxdb-Build: OSS
+X-Influxdb-Version: 1.7.10
+X-Request-Id: 4c5f997b-f17d-11eb-8dce-0242ac150003
+Date: Fri, 30 Jul 2021 21:30:01 GMT
+
+BC_20YEAR => 1.81
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100    26    0     0  100    26      0   3250 --:--:-- --:--:-- --:--:--  3250
+HTTP/1.1 204 No Content
+Content-Type: application/json
+Request-Id: 4c61ee0c-f17d-11eb-8dcf-0242ac150003
+X-Influxdb-Build: OSS
+X-Influxdb-Version: 1.7.10
+X-Request-Id: 4c61ee0c-f17d-11eb-8dcf-0242ac150003
+Date: Fri, 30 Jul 2021 21:30:01 GMT
+
+BC_30YEAR => 1.89
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100    26    0     0  100    26      0   3250 --:--:-- --:--:-- --:--:--  3250
+HTTP/1.1 204 No Content
+Content-Type: application/json
+Request-Id: 4c644401-f17d-11eb-8dd0-0242ac150003
+X-Influxdb-Build: OSS
+X-Influxdb-Version: 1.7.10
+X-Request-Id: 4c644401-f17d-11eb-8dd0-0242ac150003
+Date: Fri, 30 Jul 2021 21:30:01 GMT
 
